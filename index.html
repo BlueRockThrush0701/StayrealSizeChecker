@@ -6,38 +6,43 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>服装版型与尺码检索对比</title>
     <style>
-        /* 样式保持完全不变 */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; padding: 15px; }
         .container { max-width: 1300px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        h1 { text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 20px; }
+        h1 { text-align: center; margin-bottom: 15px; color: #2c3e50; font-size: 22px; }
+        .notice-board { background-color: #f0f9ff; border-left: 4px solid #409eff; padding: 12px 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; color: #606266; line-height: 1.5; }
+        .notice-board h3 { font-size: 15px; color: #409eff; margin-bottom: 5px; }
         .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .controls input, .controls select { padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; outline: none; flex: 1; min-width: 120px; }
         .controls input:focus, .controls select:focus { border-color: #409eff; }
         .table-view { display: block; overflow-x: auto; border: 1px solid #ebeef5; border-radius: 8px; }
-        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1300px; }
         th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #ebeef5; font-size: 14px; white-space: nowrap; }
         th { background-color: #fafafa; font-weight: 600; color: #606266; }
         tr:hover { background-color: #f5f7fa; }
         .card-view { display: none; flex-direction: column; gap: 15px; }
         .item-card { border: 1px solid #ebeef5; border-radius: 10px; padding: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: all 0.3s; }
         .item-card.selected { border-color: #409eff; background-color: #f0f7ff; }
-        .card-header { display: flex; gap: 15px; align-items: center; }
-        .card-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; background-color: #eee; }
+        .card-header { display: flex; gap: 12px; align-items: flex-start; }
+        .card-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; background-color: #eee; flex-shrink: 0; }
         .card-info { flex: 1; }
-        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;}
-        .tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-left: 6px; vertical-align: middle;}
+        .card-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; color: #2c3e50; line-height: 1.4;}
+        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; margin-bottom: 5px;}
+        .card-basic { font-size: 13px; color: #606266; margin-bottom: 5px;}
+        .tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-right: 5px; vertical-align: middle; display: inline-block; margin-top: 4px;}
         .tag-size { background: #e6f7ff; color: #1890ff; }
         .tag-black { background: #333; color: #fff; }
         .tag-red { background: #f56c6c; color: #fff; }
         .tag-other { background: #e6a23c; color: #fff; }
-        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; }
-        .card-basic { font-size: 13px; color: #606266; margin-top: 5px; }
-        .card-details { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ebeef5; font-size: 13px; color: #606266; }
+        .link-btn { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; text-decoration: none; margin-right: 5px; margin-top: 4px; font-weight: 500;}
+        .link-tb { background-color: #ff5000; color: white; }
+        .link-xcx { background-color: #07c160; color: white; }
+        .toggle-details { font-size: 12px; color: #409eff; cursor: pointer; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ebeef5; }
+        .card-details { display: none; margin-top: 10px; font-size: 13px; color: #606266; }
         .card-details.show { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .card-details span { display: flex; justify-content: space-between; }
+        .card-details span { display: flex; justify-content: space-between; border-bottom: 1px solid #f5f7fa; padding-bottom: 3px;}
         .card-details span b { color: #333; }
-        .btn { padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; border: none; transition: all 0.2s; width: 100%; margin-top: 15px; }
+        .btn { padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; border: none; transition: all 0.2s; width: 100%; margin-top: 10px; }
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
         .compare-section { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 15px; margin-top: 25px; }
@@ -46,10 +51,10 @@
         .compare-header h2 { font-size: 16px; color: #409eff; margin: 0; }
         .compare-header button { width: auto; margin: 0; padding: 6px 12px; }
         .compare-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #ebeef5; }
-        .compare-table { width: 100%; border-collapse: collapse; background: #fff; min-width: 500px; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #fff; min-width: 600px; }
         .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 10px 8px; text-align: center; font-size: 13px; }
         .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 90px; font-weight: bold; color: #606266; white-space: nowrap; }
-        .compare-table img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; margin-bottom: 4px;}
+        .compare-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 4px;}
         @media (max-width: 768px) {
             .table-view { display: none; }
             .card-view { display: flex; }
@@ -61,6 +66,14 @@
 
 <div class="container">
     <h1>📏 服装版型与尺码检索</h1>
+    
+    <div class="notice-board">
+        <h3>💡 使用说明</h3>
+        1. 本系统数据来源于内部表格，可通过上方搜索框快速查找款式。<br>
+        2. 点击“加入对比”，可同时对比最多 4 件衣服的详细尺寸差异。<br>
+        3. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。
+        有任何问题请联系小红书：天天蓝蓝蓝矶鸫💙
+    </div>
     
     <div class="controls">
         <input type="text" id="searchInput" placeholder="搜索商品名、类别或版型...">
@@ -83,9 +96,10 @@
                     <th>图片</th>
                     <th>类别</th>
                     <th>商品名</th>
-                    <th>标准版型</th>
+                    <th>版型</th>
                     <th>尺码</th>
                     <th>价格</th>
+                    <th>购买链接</th>
                     <th>肩宽</th>
                     <th>胸围</th>
                     <th>衣长(前)</th>
@@ -131,33 +145,67 @@
         return 'tag-other';
     }
 
-    // === 核心：自动拆解宽表 + 智能匹配图片 ===
+    // 🔥 修复：极其严格的格式化，只有纯数字才加 cm
+    function formatNum(val) {
+        if (val === undefined || val === null || val === "/" || val === "" || val === "-") return "-";
+        let strVal = String(val).trim();
+        if (strVal === "") return "-";
+        // 如果值里已经带了单位，就不重复加
+        if (strVal.includes('cm') || strVal.includes('CM')) return strVal;
+        return strVal + " cm";
+    }
+
+    // 🔥 修复：智能获取“衣长(前)”的字段，兼容所有可能的括号和名字
+    function getFrontLength(row, size) {
+        const possibleKeys = [
+            `${size}_衣长(前)`, `${size}_衣长（前）`, 
+            `${size}_衣长`, `${size}_前衣长`, 
+            `${size}_（前）衣长`, `${size}_衣长（前衣长）`
+        ];
+        for (let key of possibleKeys) {
+            if (row[key] !== undefined && row[key] !== null && row[key] !== "/" && row[key] !== "") {
+                return row[key];
+            }
+        }
+        return "-";
+    }
+
     function processWideData(rawData) {
         let formatted = [];
         let autoId = 1;
         const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 
         rawData.forEach(row => {
-            // 🔥 终极图片拼接逻辑 🔥
             let rawImgName = row["图片"]; 
-            let finalImgUrl = "https://via.placeholder.com/70?text=无图"; // 默认图
-
-            // 如果填了内容，并且不是 "/" 或者 "-"
+            let finalImgUrl = "https://via.placeholder.com/70?text=无图";
             if (rawImgName && rawImgName !== "/" && rawImgName !== "-" && rawImgName.trim() !== "") {
-                // 如果填的本身就是完整的网络链接（比如腾讯云链接），直接用
                 if (rawImgName.startsWith("http")) {
                     finalImgUrl = rawImgName;
                 } else {
-                    // 如果是本地文件名，判断一下有没有后缀，没有就自动加 .jpg
                     let suffix = rawImgName.includes('.') ? "" : ".jpg";
-                    // 拼接你的文件夹名 "image"
                     finalImgUrl = "image/" + rawImgName + suffix;
                 }
             }
 
+            let tbLink = row["TB"] && row["TB"] !== "/" ? row["TB"] : "";
+            let xcxLink = row["XCX"] && row["XCX"] !== "/" ? row["XCX"] : "";
+            if(tbLink && !tbLink.startsWith("http")) {
+                let match = tbLink.match(/https?:\/\/[^\s]+/);
+                if(match) tbLink = match[0];
+            }
+
             sizes.forEach(size => {
-                let checkField = `${size}_胸围`;
-                if (row[checkField] !== undefined && row[checkField] !== "" && row[checkField] !== null) {
+                let hasData = false;
+                // 检查所有可能的尺码字段，只有有一项填了，就算有这个尺码
+                const keysToCheck = ['肩宽', '胸围', '衣长(前)', '衣长（前）', '衣长', '后衣长', '袖长', '袖口宽', '下摆宽'];
+                for (let k of keysToCheck) {
+                    if (row[`${size}_${k}`] !== undefined && row[`${size}_${k}`] !== "/" && row[`${size}_${k}`] !== "") {
+                        hasData = true;
+                        break;
+                    }
+                }
+
+                if (hasData) {
                     formatted.push({
                         id: autoId++,
                         img: finalImgUrl, 
@@ -166,14 +214,16 @@
                         version: row["标准版型"] || "-",
                         price: row["价格"] || "-",
                         date: row["上新日期"] || "-",
+                        tb: tbLink,
+                        xcx: xcxLink,
                         size: size,
-                        shoulder: row[`${size}_肩宽`] || "-",
-                        chest: row[`${size}_胸围`] || "-",
-                        length: row[`${size}_衣长`] || row[`${size}_衣长（前衣长）`] || row[`${size}_（前）衣长`] || "-",
-                        backLength: row[`${size}_后衣长`] || "-",
-                        sleeve: row[`${size}_袖长`] || "-",
-                        cuff: row[`${size}_袖口宽`] || "-",
-                        hem: row[`${size}_下摆宽`] || "-"
+                        shoulder: formatNum(row[`${size}_肩宽`]),
+                        chest: formatNum(row[`${size}_胸围`]),
+                        length: formatNum(getFrontLength(row, size)), // 智能抓取前衣长
+                        backLength: formatNum(row[`${size}_后衣长`]),
+                        sleeve: formatNum(row[`${size}_袖长`]),
+                        cuff: formatNum(row[`${size}_袖口宽`]),
+                        hem: formatNum(row[`${size}_下摆宽`])
                     });
                 }
             });
@@ -189,16 +239,15 @@
         })
         .catch(error => {
             console.error("数据读取失败", error);
-            tableBody.innerHTML = '<tr><td colspan="15" style="color: red; text-align: center;">请确保 data.json 文件已上传，且列名已按要求修改（如：S_肩宽）</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="16" style="color: red; text-align: center;">请确保 data.json 文件已上传，且列名已按要求修改。</td></tr>';
         });
 
-    // 渲染页面
     function renderItems(data) {
         tableBody.innerHTML = '';
         cardView.innerHTML = '';
 
         if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="15" style="padding: 30px; text-align:center;">没有找到匹配的数据 😢</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="16" style="padding: 30px; text-align:center;">没有找到匹配的数据 😢</td></tr>';
             cardView.innerHTML = '<div style="text-align: center; padding: 30px; color: #999;">没有找到匹配的数据 😢</div>';
             return;
         }
@@ -209,7 +258,11 @@
             const btnText = isSelected ? '取消对比' : '加入对比';
             const vClass = getVersionClass(item.version);
 
-            // 电脑端表格
+            let linksHtml = '';
+            if (item.tb) linksHtml += `<a href="${item.tb}" target="_blank" class="link-btn link-tb">淘宝</a>`;
+            if (item.xcx) linksHtml += `<a href="${item.xcx}" target="_blank" class="link-btn link-xcx">小程序</a>`;
+            if (!linksHtml) linksHtml = '-';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><button class="btn ${btnClass}" style="margin:0; padding: 6px 12px;" onclick="toggleSelect(${item.id})">${isSelected ? '取消' : '对比'}</button></td>
@@ -219,6 +272,7 @@
                 <td><span class="tag ${vClass}">${item.version}</span></td>
                 <td><strong>${item.size}</strong></td>
                 <td style="color: #f56c6c; font-weight: bold;">¥${item.price}</td>
+                <td>${linksHtml}</td>
                 <td>${item.shoulder}</td>
                 <td>${item.chest}</td>
                 <td>${item.length}</td>
@@ -230,35 +284,31 @@
             `;
             tableBody.appendChild(tr);
 
-            // 手机端卡片
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
                 <div class="card-header">
                     <img src="${item.img}" class="card-img" onerror="this.src='https://via.placeholder.com/70?text=无图'">
                     <div class="card-info">
-                        <div class="card-title">
-                            <span>
-                                ${item.name} 
-                                <span class="tag tag-size">${item.size}</span>
-                                <span class="tag ${vClass}">${item.version}</span>
-                            </span>
-                            <span class="card-price">¥${item.price}</span>
-                        </div>
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-price">¥${item.price}</div>
                         <div class="card-basic">
-                            类别：${item.category} | 胸围：${item.chest}cm | 衣长：${item.length}cm
+                            <span class="tag tag-size">${item.size}</span>
+                            <span class="tag ${vClass}">${item.version}</span>
+                            <span style="font-size: 12px; color: #999; margin-left: 5px;">${item.category}</span>
                         </div>
-                        <div style="font-size: 12px; color: #999; margin-top: 5px;" onclick="this.parentElement.nextElementSibling.classList.toggle('show')">
-                            点击查看详细尺寸 👇
-                        </div>
+                        <div style="margin-top: 5px;">${linksHtml}</div>
                     </div>
                 </div>
+                <div class="toggle-details" onclick="this.nextElementSibling.classList.toggle('show')">点击查看详细尺寸 👇</div>
                 <div class="card-details">
-                    <span>肩宽：<b>${item.shoulder} cm</b></span>
-                    <span>后衣长：<b>${item.backLength} cm</b></span>
-                    <span>袖长：<b>${item.sleeve} cm</b></span>
-                    <span>袖口宽：<b>${item.cuff} cm</b></span>
-                    <span>下摆宽：<b>${item.hem} cm</b></span>
+                    <span>肩宽：<b>${item.shoulder}</b></span>
+                    <span>胸围：<b>${item.chest}</b></span>
+                    <span>衣长(前)：<b>${item.length}</b></span>
+                    <span>后衣长：<b>${item.backLength}</b></span>
+                    <span>袖长：<b>${item.sleeve}</b></span>
+                    <span>袖口宽：<b>${item.cuff}</b></span>
+                    <span>下摆宽：<b>${item.hem}</b></span>
                     <span>上新：<b>${item.date}</b></span>
                 </div>
                 <button class="btn ${btnClass}" onclick="toggleSelect(${item.id})">${btnText}</button>
@@ -303,13 +353,13 @@
         const fields = [
             { key: 'version', label: '标准版型' },
             { key: 'price', label: '价格', prefix: '¥' },
-            { key: 'shoulder', label: '肩宽', suffix: 'cm' },
-            { key: 'chest', label: '胸围', suffix: 'cm' },
-            { key: 'length', label: '衣长', suffix: 'cm' },
-            { key: 'backLength', label: '后衣长', suffix: 'cm' },
-            { key: 'sleeve', label: '袖长', suffix: 'cm' },
-            { key: 'cuff', label: '袖口宽', suffix: 'cm' },
-            { key: 'hem', label: '下摆宽', suffix: 'cm' }
+            { key: 'shoulder', label: '肩宽' },
+            { key: 'chest', label: '胸围' },
+            { key: 'length', label: '衣长(前)' },
+            { key: 'backLength', label: '后衣长' },
+            { key: 'sleeve', label: '袖长' },
+            { key: 'cuff', label: '袖口宽' },
+            { key: 'hem', label: '下摆宽' }
         ];
 
         let tbodyHtml = '';
@@ -318,8 +368,8 @@
             selectedItems.forEach(item => {
                 const val = item[field.key];
                 const prefix = field.prefix || '';
-                const suffix = field.suffix || '';
-                tbodyHtml += `<td>${val !== undefined ? prefix + val + suffix : '-'}</td>`;
+                // 这里不需要再判断，因为 formatNum 已经处理得干干净净了
+                tbodyHtml += `<td>${val !== undefined ? prefix + val : '-'}</td>`;
             });
             tbodyHtml += '</tr>';
         });
