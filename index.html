@@ -19,6 +19,18 @@
         .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .controls input, .controls select { padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; outline: none; flex: 1; min-width: 120px; }
         .controls input:focus, .controls select:focus { border-color: #409eff; }
+
+        /* 对比面板（移到了上方） */
+        .compare-section { display: none; background-color: #f8f9fa; border: 2px solid #409eff; border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(64,158,255,0.15); transition: all 0.3s ease; }
+        .compare-section.active { display: block; }
+        .compare-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .compare-header h2 { font-size: 16px; color: #409eff; margin: 0; display: flex; align-items: center; gap: 8px;}
+        .compare-header button { width: auto; margin: 0; padding: 6px 12px; background-color: #fff; color: #f56c6c; border: 1px solid #fbc4c4; }
+        .compare-header button:hover { background-color: #f56c6c; color: #fff;}
+        .compare-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #ebeef5; background: #fff;}
+        .compare-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 10px 8px; text-align: center; font-size: 13px; }
+        .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 90px; font-weight: bold; color: #606266; white-space: nowrap; }
         
         /* 电脑端表格 */
         .table-view { display: block; overflow-x: auto; border: 1px solid #ebeef5; border-radius: 8px; }
@@ -58,17 +70,6 @@
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
         
-        /* 对比面板 */
-        .compare-section { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 15px; margin-top: 25px; }
-        .compare-section.active { display: block; }
-        .compare-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .compare-header h2 { font-size: 16px; color: #409eff; margin: 0; }
-        .compare-header button { width: auto; margin: 0; padding: 6px 12px; }
-        .compare-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #ebeef5; }
-        .compare-table { width: 100%; border-collapse: collapse; background: #fff; min-width: 600px; }
-        .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 10px 8px; text-align: center; font-size: 13px; }
-        .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 90px; font-weight: bold; color: #606266; white-space: nowrap; }
-        
         @media (max-width: 768px) {
             .table-view { display: none; }
             .card-view { display: flex; }
@@ -84,8 +85,7 @@
     <div class="notice-board">
         <h3>💡 使用说明</h3>
         1. 本系统数据来源于内部表格，可通过上方搜索框快速查找款式。<br>
-        2. 点击“加入对比”，可同时对比最多 4 件衣服的详细尺寸差异。<br>
-        3. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。
+        2. 点击“加入对比”，页面会自动跳到顶部对比面板，最多同时对比 4 件。
     </div>
     
     <div class="controls">
@@ -99,6 +99,17 @@
             <option value="XL">XL码</option>
             <option value="2XL">2XL码</option>
         </select>
+    </div>
+
+    <!-- 对比面板已移到最上方 -->
+    <div id="compareSection" class="compare-section">
+        <div class="compare-header">
+            <h2>📊 版型对比面板</h2>
+            <button class="btn btn-select" onclick="clearCompare()">清空对比</button>
+        </div>
+        <div class="compare-table-wrap">
+            <table class="compare-table" id="compareTable"></table>
+        </div>
     </div>
 
     <div class="table-view">
@@ -127,15 +138,6 @@
 
     <div class="card-view" id="cardView"></div>
 
-    <div id="compareSection" class="compare-section">
-        <div class="compare-header">
-            <h2>📊 版型对比面板</h2>
-            <button class="btn btn-select" onclick="clearCompare()">清空对比</button>
-        </div>
-        <div class="compare-table-wrap">
-            <table class="compare-table" id="compareTable"></table>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -156,7 +158,6 @@
         return 'tag-other';
     }
 
-    // 格式化数字，只有纯数字才加 cm
     function formatNum(val) {
         if (val === undefined || val === null || val === "/" || val === "" || val === "-") return "-";
         let strVal = String(val).trim();
@@ -165,7 +166,6 @@
         return strVal + " cm";
     }
 
-    // 智能获取“衣长(前)”的字段
     function getFrontLength(row, size) {
         const possibleKeys = [
             `${size}_衣长(前)`, `${size}_衣长（前）`, 
@@ -246,7 +246,6 @@
             const btnText = isSelected ? '取消对比' : '加入对比';
             const vClass = getVersionClass(item.version);
 
-            // 电脑端表格
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><button class="btn ${btnClass}" style="margin:0; padding: 6px 12px;" onclick="toggleSelect(${item.id})">${isSelected ? '取消' : '对比'}</button></td>
@@ -266,7 +265,6 @@
             `;
             tableBody.appendChild(tr);
 
-            // 手机端卡片（纯文字版）
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
@@ -316,7 +314,11 @@
     }
 
     function renderCompare() {
-        if (selectedIds.length === 0) { compareSection.classList.remove('active'); return; }
+        if (selectedIds.length === 0) { 
+            compareSection.classList.remove('active'); 
+            return; 
+        }
+        
         compareSection.classList.add('active');
         const selectedItems = clothesData.filter(item => selectedIds.includes(item.id));
         
@@ -354,6 +356,12 @@
         });
 
         compareTable.innerHTML = theadHtml + tbodyHtml;
+
+        // 🔥 魔法交互：每次勾选后，自动平滑滚动到页面最顶部的对比面板！
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 
     function filterData() {
