@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>服装版型与尺码检索对比</title>
     <style>
-        /* 样式保持完全不变，直接复制之前的样式即可 */
+        /* 样式保持完全不变 */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; padding: 15px; }
         .container { max-width: 1300px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -114,7 +114,7 @@
 </div>
 
 <script>
-    let clothesData = []; // 存放转换后的纵向数据
+    let clothesData = []; 
     let selectedIds = [];
     
     const tableBody = document.getElementById('tableBody');
@@ -124,7 +124,6 @@
     const compareSection = document.getElementById('compareSection');
     const compareTable = document.getElementById('compareTable');
 
-    // 获取版型样式
     function getVersionClass(version) {
         if (!version) return 'tag-other';
         if (version.includes('黑')) return 'tag-black';
@@ -132,21 +131,36 @@
         return 'tag-other';
     }
 
-    // === 核心：自动拆解宽表的函数 ===
+    // === 核心：自动拆解宽表 + 智能匹配图片 ===
     function processWideData(rawData) {
         let formatted = [];
         let autoId = 1;
-        const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL']; // 遍历所有可能尺码
+        const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 
         rawData.forEach(row => {
+            // 🔥 终极图片拼接逻辑 🔥
+            let rawImgName = row["图片"]; 
+            let finalImgUrl = "https://via.placeholder.com/70?text=无图"; // 默认图
+
+            // 如果填了内容，并且不是 "/" 或者 "-"
+            if (rawImgName && rawImgName !== "/" && rawImgName !== "-" && rawImgName.trim() !== "") {
+                // 如果填的本身就是完整的网络链接（比如腾讯云链接），直接用
+                if (rawImgName.startsWith("http")) {
+                    finalImgUrl = rawImgName;
+                } else {
+                    // 如果是本地文件名，判断一下有没有后缀，没有就自动加 .jpg
+                    let suffix = rawImgName.includes('.') ? "" : ".jpg";
+                    // 拼接你的文件夹名 "image"
+                    finalImgUrl = "image/" + rawImgName + suffix;
+                }
+            }
+
             sizes.forEach(size => {
-                // 判断条件：只要该尺码的“胸围”或“肩宽”不是空的，就认为有这件衣服的这个尺码
                 let checkField = `${size}_胸围`;
-                // 如果你的腾讯文档转出来没有加前缀，系统可能会加上数字，比如 "胸围_2"，这里做个兼容
                 if (row[checkField] !== undefined && row[checkField] !== "" && row[checkField] !== null) {
                     formatted.push({
                         id: autoId++,
-                        img: row["图片"] || "images/default.jpg",
+                        img: finalImgUrl, 
                         category: row["类别"] || "-",
                         name: row["商品名"] || "-",
                         version: row["标准版型"] || "-",
@@ -167,11 +181,9 @@
         return formatted;
     }
 
-    // 加载本地 data.json 数据
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            // 传入原始数据，自动转换为网页需要的格式
             clothesData = processWideData(data);
             renderItems(clothesData);
         })
@@ -255,7 +267,6 @@
         });
     }
 
-    // ... 以下的选择、对比、筛选逻辑和之前完全一样 ...
     function toggleSelect(id) {
         if (selectedIds.includes(id)) {
             selectedIds = selectedIds.filter(item => item !== id);
