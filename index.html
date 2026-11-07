@@ -1,149 +1,133 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的尺码检索表</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f5f7fa; color: #333; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1 { text-align: center; margin-bottom: 20px; color: #2c3e50; }
+        
+        /* 搜索与筛选区 */
+        .controls { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .controls input, .controls select { padding: 10px 15px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 15px; outline: none; transition: border-color 0.2s; }
+        .controls input:focus, .controls select:focus { border-color: #409eff; }
+        .controls input { flex: 1; min-width: 200px; }
+        
+        /* 表格样式 */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ebeef5; }
+        th { background-color: #fafafa; font-weight: 600; color: #606266; white-space: nowrap; }
+        tr:hover { background-color: #f5f7fa; }
+        
+        /* 状态提示 */
+        .no-result { text-align: center; padding: 40px; color: #909399; }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="zh-CN"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;我的尺码检索表&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>* { box-sizing: border-box; margin: 0; padding: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f5f7fa; color: #333; padding: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1 { text-align: center; margin-bottom: 20px; color: #2c3e50; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* 搜索与筛选区 */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.controls { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.controls input, .controls select { padding: 10px 15px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 15px; outline: none; transition: border-color 0.2s; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.controls input:focus, .controls select:focus { border-color: #409eff; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.controls input { flex: 1; min-width: 200px; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* 表格样式 */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.table-container { overflow-x: auto; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>table { width: 100%; border-collapse: collapse; margin-top: 10px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ebeef5; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>th { background-color: #fafafa; font-weight: 600; color: #606266; white-space: nowrap; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>tr:hover { background-color: #f5f7fa; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* 状态提示 */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.no-result { text-align: center; padding: 40px; color: #909399; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;🧥 我的衣服尺码检索&lt;/h1&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="controls"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" id="searchInput" placeholder="输入品牌或款式名搜索（如：Nike、冲锋衣）..."&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;select id="sizeFilter"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value=""&gt;全部尺码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="S"&gt;S码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="M"&gt;M码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="L"&gt;L码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="XL"&gt;XL码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="XXL"&gt;XXL码&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;品牌&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;款式/型号&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;尺码&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;胸围 (cm)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;衣长 (cm)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;建议身高&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;th&gt;建议体重 (kg)&lt;/th&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;tbody id="tableBody"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- 数据将通过 JS 动态填入 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="noResult" class="no-result" style="display: none;"&gt;没有找到匹配的尺码数据 😢&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 为了能在 GitHub Pages 直接运行且不需要额外文件，我们先把演示数据直接写在这里</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 等你熟悉了，再改回从 data.json 读取</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const clothesData = [</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{ brand: "Nike", name: "运动夹克", size: "M", chest: 104, length: 68, height: "170-175", weight: "65-70" },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{ brand: "Uniqlo", name: "摇粒绒外套", size: "L", chest: 108, length: 70, height: "175-180", weight: "70-75" },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{ brand: "迪卡侬", name: "冲锋衣", size: "XL", chest: 112, length: 74, height: "180-185", weight: "80-85" },</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{ brand: "迪卡侬", name: "滑雪服", size: "S", chest: 96, length: 62, height: "160-165", weight: "50-55" }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 获取 DOM 元素</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const tableBody = document.getElementById('tableBody');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const searchInput = document.getElementById('searchInput');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sizeFilter = document.getElementById('sizeFilter');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const noResult = document.getElementById('noResult');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 渲染表格</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function renderTable(data) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>tableBody.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (data.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>noResult.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>noResult.style.display = 'none';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>data.forEach(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const tr = document.createElement('tr');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>tr.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.brand || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.name || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;&lt;strong&gt;${item.size || '-'}&lt;/strong&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.chest || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.length || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.height || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;td&gt;${item.weight || '-'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>tableBody.appendChild(tr);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 搜索与筛选逻辑</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function filterData() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const keyword = searchInput.value.toLowerCase().trim();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const selectedSize = sizeFilter.value;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const filtered = clothesData.filter(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const matchKeyword = (item.brand &amp;&amp; item.brand.toLowerCase().includes(keyword)) ||<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                                 </span>(item.name &amp;&amp; item.name.toLowerCase().includes(keyword));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const matchSize = selectedSize === '' || item.size === selectedSize;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>return matchKeyword &amp;&amp; matchSize;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>renderTable(filtered);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 绑定事件</p>
-<p class="p1"><span class="Apple-converted-space">    </span>searchInput.addEventListener('input', filterData);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>sizeFilter.addEventListener('change', filterData);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// 初始渲染</p>
-<p class="p1"><span class="Apple-converted-space">    </span>renderTable(clothesData);</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<div class="container">
+    <h1>🧥 我的衣服尺码检索</h1>
+    
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="输入品牌或款式名搜索（如：Nike、冲锋衣）...">
+        <select id="sizeFilter">
+            <option value="">全部尺码</option>
+            <option value="S">S码</option>
+            <option value="M">M码</option>
+            <option value="L">L码</option>
+            <option value="XL">XL码</option>
+            <option value="XXL">XXL码</option>
+        </select>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>品牌</th>
+                    <th>款式/型号</th>
+                    <th>尺码</th>
+                    <th>胸围 (cm)</th>
+                    <th>衣长 (cm)</th>
+                    <th>建议身高</th>
+                    <th>建议体重 (kg)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- 数据将通过 JS 动态填入 -->
+            </tbody>
+        </table>
+        <div id="noResult" class="no-result" style="display: none;">没有找到匹配的尺码数据 😢</div>
+    </div>
+</div>
+
+<script>
+    // 为了能在 GitHub Pages 直接运行且不需要额外文件，我们先把演示数据直接写在这里
+    // 等你熟悉了，再改回从 data.json 读取
+    const clothesData = [
+        { brand: "Nike", name: "运动夹克", size: "M", chest: 104, length: 68, height: "170-175", weight: "65-70" },
+        { brand: "Uniqlo", name: "摇粒绒外套", size: "L", chest: 108, length: 70, height: "175-180", weight: "70-75" },
+        { brand: "迪卡侬", name: "冲锋衣", size: "XL", chest: 112, length: 74, height: "180-185", weight: "80-85" },
+        { brand: "迪卡侬", name: "滑雪服", size: "S", chest: 96, length: 62, height: "160-165", weight: "50-55" }
+    ];
+
+    // 获取 DOM 元素
+    const tableBody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const sizeFilter = document.getElementById('sizeFilter');
+    const noResult = document.getElementById('noResult');
+
+    // 渲染表格
+    function renderTable(data) {
+        tableBody.innerHTML = '';
+        if (data.length === 0) {
+            noResult.style.display = 'block';
+            return;
+        }
+        noResult.style.display = 'none';
+
+        data.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.brand || '-'}</td>
+                <td>${item.name || '-'}</td>
+                <td><strong>${item.size || '-'}</strong></td>
+                <td>${item.chest || '-'}</td>
+                <td>${item.length || '-'}</td>
+                <td>${item.height || '-'}</td>
+                <td>${item.weight || '-'}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    // 搜索与筛选逻辑
+    function filterData() {
+        const keyword = searchInput.value.toLowerCase().trim();
+        const selectedSize = sizeFilter.value;
+
+        const filtered = clothesData.filter(item => {
+            const matchKeyword = (item.brand && item.brand.toLowerCase().includes(keyword)) || 
+                                 (item.name && item.name.toLowerCase().includes(keyword));
+            const matchSize = selectedSize === '' || item.size === selectedSize;
+
+            return matchKeyword && matchSize;
+        });
+
+        renderTable(filtered);
+    }
+
+    // 绑定事件
+    searchInput.addEventListener('input', filterData);
+    sizeFilter.addEventListener('change', filterData);
+
+    // 初始渲染
+    renderTable(clothesData);
+</script>
+
 </body>
 </html>
