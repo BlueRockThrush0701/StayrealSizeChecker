@@ -10,41 +10,61 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; padding: 15px; }
         .container { max-width: 1300px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         h1 { text-align: center; margin-bottom: 15px; color: #2c3e50; font-size: 22px; }
+        
+        /* 说明板块 */
         .notice-board { background-color: #f0f9ff; border-left: 4px solid #409eff; padding: 12px 15px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; color: #606266; line-height: 1.5; }
         .notice-board h3 { font-size: 15px; color: #409eff; margin-bottom: 5px; }
+
+        /* 搜索与筛选 */
         .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .controls input, .controls select { padding: 10px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 14px; outline: none; flex: 1; min-width: 120px; }
         .controls input:focus, .controls select:focus { border-color: #409eff; }
+        
+        /* 电脑端表格 */
         .table-view { display: block; overflow-x: auto; border: 1px solid #ebeef5; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; min-width: 1300px; }
         th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #ebeef5; font-size: 14px; white-space: nowrap; }
         th { background-color: #fafafa; font-weight: 600; color: #606266; }
         tr:hover { background-color: #f5f7fa; }
+        
+        /* 手机端卡片（彻底重构） */
         .card-view { display: none; flex-direction: column; gap: 15px; }
-        .item-card { border: 1px solid #ebeef5; border-radius: 10px; padding: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.02); transition: all 0.3s; }
+        .item-card { border: 1px solid #ebeef5; border-radius: 10px; padding: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .item-card.selected { border-color: #409eff; background-color: #f0f7ff; }
-        .card-header { display: flex; gap: 12px; align-items: flex-start; }
+        
+        .card-top { display: flex; gap: 12px; margin-bottom: 10px; }
         .card-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; background-color: #eee; flex-shrink: 0; }
-        .card-info { flex: 1; }
-        .card-title { font-size: 15px; font-weight: bold; margin-bottom: 5px; color: #2c3e50; line-height: 1.4;}
-        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; margin-bottom: 5px;}
-        .card-basic { font-size: 13px; color: #606266; margin-bottom: 5px;}
-        .tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: normal; margin-right: 5px; vertical-align: middle; display: inline-block; margin-top: 4px;}
+        .card-info { flex: 1; overflow: hidden; /* 防止文字撑破 */}
+        .card-title { font-size: 15px; font-weight: bold; margin-bottom: 6px; color: #2c3e50; line-height: 1.4; }
+        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; margin-bottom: 6px; }
+        
+        /* 标签和链接可以自动换行 */
+        .tags-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
+        .tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: normal; white-space: nowrap; }
         .tag-size { background: #e6f7ff; color: #1890ff; }
         .tag-black { background: #333; color: #fff; }
         .tag-red { background: #f56c6c; color: #fff; }
         .tag-other { background: #e6a23c; color: #fff; }
-        .link-btn { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; text-decoration: none; margin-right: 5px; margin-top: 4px; font-weight: 500;}
+        .tag-cat { background: #f4f4f5; color: #909399; }
+        
+        .links-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+        .link-btn { padding: 3px 8px; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: 500; white-space: nowrap;}
         .link-tb { background-color: #ff5000; color: white; }
         .link-xcx { background-color: #07c160; color: white; }
-        .toggle-details { font-size: 12px; color: #409eff; cursor: pointer; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ebeef5; }
+        
+        /* 详细参数区 */
+        .toggle-details { font-size: 13px; color: #409eff; cursor: pointer; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ebeef5; }
         .card-details { display: none; margin-top: 10px; font-size: 13px; color: #606266; }
         .card-details.show { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .card-details span { display: flex; justify-content: space-between; border-bottom: 1px solid #f5f7fa; padding-bottom: 3px;}
+        .card-details span { display: flex; justify-content: space-between; border-bottom: 1px solid #f5f7fa; padding-bottom: 4px;}
         .card-details span b { color: #333; }
+
+        /* 按钮 */
         .btn { padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; border: none; transition: all 0.2s; width: 100%; margin-top: 10px; }
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
+        
+        /* 对比面板 */
         .compare-section { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 15px; margin-top: 25px; }
         .compare-section.active { display: block; }
         .compare-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -55,6 +75,7 @@
         .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 10px 8px; text-align: center; font-size: 13px; }
         .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 90px; font-weight: bold; color: #606266; white-space: nowrap; }
         .compare-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 4px;}
+        
         @media (max-width: 768px) {
             .table-view { display: none; }
             .card-view { display: flex; }
@@ -71,8 +92,9 @@
         <h3>💡 使用说明</h3>
         1. 本系统数据来源于内部表格，可通过上方搜索框快速查找款式。<br>
         2. 点击“加入对比”，可同时对比最多 4 件衣服的详细尺寸差异。<br>
-        3. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。
-        有任何问题请联系小红书：天天蓝蓝蓝矶鸫💙
+        3. 手机版请使用浏览器打开本网页，微信直接打开可能存在比例过窄的问题。 <br>
+        4. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。<br>
+        有任何使用上的问题，请联系小红书：天天蓝蓝蓝矶鸫💙
     </div>
     
     <div class="controls">
@@ -145,17 +167,14 @@
         return 'tag-other';
     }
 
-    // 🔥 修复：极其严格的格式化，只有纯数字才加 cm
     function formatNum(val) {
         if (val === undefined || val === null || val === "/" || val === "" || val === "-") return "-";
         let strVal = String(val).trim();
         if (strVal === "") return "-";
-        // 如果值里已经带了单位，就不重复加
         if (strVal.includes('cm') || strVal.includes('CM')) return strVal;
         return strVal + " cm";
     }
 
-    // 🔥 修复：智能获取“衣长(前)”的字段，兼容所有可能的括号和名字
     function getFrontLength(row, size) {
         const possibleKeys = [
             `${size}_衣长(前)`, `${size}_衣长（前）`, 
@@ -196,7 +215,6 @@
 
             sizes.forEach(size => {
                 let hasData = false;
-                // 检查所有可能的尺码字段，只有有一项填了，就算有这个尺码
                 const keysToCheck = ['肩宽', '胸围', '衣长(前)', '衣长（前）', '衣长', '后衣长', '袖长', '袖口宽', '下摆宽'];
                 for (let k of keysToCheck) {
                     if (row[`${size}_${k}`] !== undefined && row[`${size}_${k}`] !== "/" && row[`${size}_${k}`] !== "") {
@@ -219,7 +237,7 @@
                         size: size,
                         shoulder: formatNum(row[`${size}_肩宽`]),
                         chest: formatNum(row[`${size}_胸围`]),
-                        length: formatNum(getFrontLength(row, size)), // 智能抓取前衣长
+                        length: formatNum(getFrontLength(row, size)),
                         backLength: formatNum(row[`${size}_后衣长`]),
                         sleeve: formatNum(row[`${size}_袖长`]),
                         cuff: formatNum(row[`${size}_袖口宽`]),
@@ -261,7 +279,6 @@
             let linksHtml = '';
             if (item.tb) linksHtml += `<a href="${item.tb}" target="_blank" class="link-btn link-tb">淘宝</a>`;
             if (item.xcx) linksHtml += `<a href="${item.xcx}" target="_blank" class="link-btn link-xcx">小程序</a>`;
-            if (!linksHtml) linksHtml = '-';
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -272,7 +289,7 @@
                 <td><span class="tag ${vClass}">${item.version}</span></td>
                 <td><strong>${item.size}</strong></td>
                 <td style="color: #f56c6c; font-weight: bold;">¥${item.price}</td>
-                <td>${linksHtml}</td>
+                <td>${linksHtml || '-'}</td>
                 <td>${item.shoulder}</td>
                 <td>${item.chest}</td>
                 <td>${item.length}</td>
@@ -287,17 +304,17 @@
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
-                <div class="card-header">
+                <div class="card-top">
                     <img src="${item.img}" class="card-img" onerror="this.src='https://via.placeholder.com/70?text=无图'">
                     <div class="card-info">
                         <div class="card-title">${item.name}</div>
                         <div class="card-price">¥${item.price}</div>
-                        <div class="card-basic">
+                        <div class="tags-wrap">
                             <span class="tag tag-size">${item.size}</span>
                             <span class="tag ${vClass}">${item.version}</span>
-                            <span style="font-size: 12px; color: #999; margin-left: 5px;">${item.category}</span>
+                            <span class="tag tag-cat">${item.category}</span>
                         </div>
-                        <div style="margin-top: 5px;">${linksHtml}</div>
+                        <div class="links-wrap">${linksHtml}</div>
                     </div>
                 </div>
                 <div class="toggle-details" onclick="this.nextElementSibling.classList.toggle('show')">点击查看详细尺寸 👇</div>
@@ -368,7 +385,6 @@
             selectedItems.forEach(item => {
                 const val = item[field.key];
                 const prefix = field.prefix || '';
-                // 这里不需要再判断，因为 formatNum 已经处理得干干净净了
                 tbodyHtml += `<td>${val !== undefined ? prefix + val : '-'}</td>`;
             });
             tbodyHtml += '</tr>';
