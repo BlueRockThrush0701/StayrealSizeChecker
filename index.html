@@ -3,59 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>衣服尺码检索与对比</title>
+    <title>服装版型与尺码检索对比</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .container { max-width: 1400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         h1 { text-align: center; margin-bottom: 20px; color: #2c3e50; font-size: 24px; }
-        h2 { font-size: 18px; margin: 30px 0 15px; color: #409eff; border-left: 4px solid #409eff; padding-left: 10px; }
         
         /* 搜索与筛选区 */
         .controls { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .controls input, .controls select { padding: 10px 15px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 15px; outline: none; transition: border-color 0.2s; }
+        .controls input, .controls select { padding: 10px 15px; border: 1px solid #dcdfe6; border-radius: 8px; font-size: 15px; outline: none; }
         .controls input:focus, .controls select:focus { border-color: #409eff; }
         .controls input { flex: 1; min-width: 200px; }
         
-        /* 表格样式 */
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ebeef5; }
-        th { background-color: #fafafa; font-weight: 600; color: #606266; white-space: nowrap; }
+        /* 表格样式：支持横向滚动 */
+        .table-container { overflow-x: auto; border: 1px solid #ebeef5; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #ebeef5; font-size: 14px; white-space: nowrap; }
+        th { background-color: #fafafa; font-weight: 600; color: #606266; position: sticky; top: 0; }
         tr:hover { background-color: #f5f7fa; }
         
-        /* 按钮样式 */
+        /* 图片与按钮 */
+        .item-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; background-color: #eee; }
         .btn { padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; border: none; transition: all 0.2s; }
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-select:hover { background-color: #409eff; color: #fff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
+        .price { color: #f56c6c; font-weight: bold; }
         
         /* 对比面板样式 */
-        .compare-section { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 20px; margin-top: 20px; }
+        .compare-section { display: none; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 20px; margin-top: 30px; }
         .compare-section.active { display: block; }
         .compare-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .compare-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .compare-table { width: 100%; border-collapse: collapse; background: #fff; min-width: 800px; }
         .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 12px; text-align: center; }
-        .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 120px; font-weight: bold; color: #606266;}
-        .compare-table .highlight { color: #f56c6c; font-weight: bold; } /* 突出显示不同数据 */
-        
-        .empty-tip { text-align: center; color: #909399; padding: 30px; }
+        .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 120px; font-weight: bold; color: #606266; white-space: nowrap; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🧥 衣服尺码检索与对比</h1>
+    <h1>📏 服装版型与尺码检索对比</h1>
     
     <div class="controls">
-        <input type="text" id="searchInput" placeholder="输入品牌或款式名搜索（如：迪卡侬、冲锋衣）...">
+        <input type="text" id="searchInput" placeholder="输入类别、商品名搜索...">
         <select id="sizeFilter">
             <option value="">全部尺码</option>
             <option value="S">S码</option>
             <option value="M">M码</option>
             <option value="L">L码</option>
             <option value="XL">XL码</option>
-            <option value="XXL">XXL码</option>
         </select>
     </div>
 
@@ -64,63 +61,82 @@
             <thead>
                 <tr>
                     <th>操作</th>
-                    <th>品牌</th>
-                    <th>款式/型号</th>
+                    <th>图片</th>
+                    <th>类别</th>
+                    <th>商品名</th>
                     <th>尺码</th>
-                    <th>胸围 (cm)</th>
-                    <th>衣长 (cm)</th>
-                    <th>建议身高</th>
-                    <th>建议体重 (kg)</th>
+                    <th>价格</th>
+                    <th>肩宽</th>
+                    <th>胸围</th>
+                    <th>衣长</th>
+                    <th>后衣长</th>
+                    <th>袖长</th>
+                    <th>袖口宽</th>
+                    <th>下摆宽</th>
+                    <th>上新日期</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <!-- 数据将通过 JS 动态填入 -->
+                <!-- 数据动态填入 -->
             </tbody>
         </table>
-        <div id="noResult" class="empty-tip" style="display: none;">没有找到匹配的尺码数据 😢</div>
     </div>
 
     <!-- 对比面板 -->
     <div id="compareSection" class="compare-section">
         <div class="compare-header">
-            <h2 style="margin:0; border:none; padding:0;">📊 尺码对比面板</h2>
+            <h2 style="margin:0; font-size: 18px; color:#409eff;">📊 版型对比面板</h2>
             <button class="btn btn-select" onclick="clearCompare()">清空对比</button>
         </div>
         <div class="table-container">
-            <table class="compare-table" id="compareTable">
-                <!-- 对比数据动态渲染 -->
-            </table>
+            <table class="compare-table" id="compareTable"></table>
         </div>
     </div>
 </div>
 
 <script>
-    // 1. 基础数据（以后你可以直接在这里增删数据）
+    // ===== 数据区 =====
+    // 为了展示，我生成了4种商品，每种4个尺码
     const clothesData = [
-        { id: 1, brand: "Nike", name: "运动夹克", size: "M", chest: 104, length: 68, height: "170-175", weight: "65-70" },
-        { id: 2, brand: "Uniqlo", name: "摇粒绒外套", size: "L", chest: 108, length: 70, height: "175-180", weight: "70-75" },
-        { id: 3, brand: "迪卡侬", name: "冲锋衣", size: "XL", chest: 112, length: 74, height: "180-185", weight: "80-85" },
-        { id: 4, brand: "迪卡侬", name: "滑雪服", size: "S", chest: 96, length: 62, height: "160-165", weight: "50-55" }
+        // 1. 基础款冲锋衣
+        { id: 1, img: "images/1.jpg", category: "外套", name: "基础冲锋衣", size: "S", price: 299, shoulder: 42, chest: 100, length: 66, backLength: 68, sleeve: 60, cuff: 11, hem: 102, date: "2023-10-01" },
+        { id: 2, img: "images/1.jpg", category: "外套", name: "基础冲锋衣", size: "M", price: 299, shoulder: 44, chest: 104, length: 68, backLength: 70, sleeve: 62, cuff: 11.5, hem: 106, date: "2023-10-01" },
+        { id: 3, img: "images/1.jpg", category: "外套", name: "基础冲锋衣", size: "L", price: 299, shoulder: 46, chest: 108, length: 70, backLength: 72, sleeve: 64, cuff: 12, hem: 110, date: "2023-10-01" },
+        { id: 4, img: "images/1.jpg", category: "外套", name: "基础冲锋衣", size: "XL", price: 299, shoulder: 48, chest: 112, length: 72, backLength: 74, sleeve: 66, cuff: 12.5, hem: 114, date: "2023-10-01" },
+
+        // 2. 加厚摇粒绒
+        { id: 5, img: "images/2.jpg", category: "抓绒", name: "加厚摇粒绒", size: "S", price: 159, shoulder: 38, chest: 96, length: 62, backLength: 64, sleeve: 58, cuff: 9, hem: 98, date: "2023-11-15" },
+        { id: 6, img: "images/2.jpg", category: "抓绒", name: "加厚摇粒绒", size: "M", price: 159, shoulder: 40, chest: 100, length: 64, backLength: 66, sleeve: 59, cuff: 9.5, hem: 102, date: "2023-11-15" },
+        { id: 7, img: "images/2.jpg", category: "抓绒", name: "加厚摇粒绒", size: "L", price: 159, shoulder: 42, chest: 104, length: 66, backLength: 68, sleeve: 60, cuff: 10, hem: 106, date: "2023-11-15" },
+        { id: 8, img: "images/2.jpg", category: "抓绒", name: "加厚摇粒绒", size: "XL", price: 159, shoulder: 44, chest: 108, length: 68, backLength: 70, sleeve: 61, cuff: 10.5, hem: 110, date: "2023-11-15" },
+
+        // 3. 越野跑长袖
+        { id: 9, img: "images/3.jpg", category: "打底", name: "越野跑长袖", size: "S", price: 129, shoulder: 36, chest: 90, length: 64, backLength: 66, sleeve: 62, cuff: 8, hem: 92, date: "2024-02-01" },
+        { id: 10, img: "images/3.jpg", category: "打底", name: "越野跑长袖", size: "M", price: 129, shoulder: 38, chest: 94, length: 66, backLength: 68, sleeve: 63, cuff: 8.5, hem: 96, date: "2024-02-01" },
+        { id: 11, img: "images/3.jpg", category: "打底", name: "越野跑长袖", size: "L", price: 129, shoulder: 40, chest: 98, length: 68, backLength: 70, sleeve: 64, cuff: 9, hem: 100, date: "2024-02-01" },
+        { id: 12, img: "images/3.jpg", category: "打底", name: "越野跑长袖", size: "XL", price: 129, shoulder: 42, chest: 102, length: 70, backLength: 72, sleeve: 65, cuff: 9.5, hem: 104, date: "2024-02-01" },
+
+        // 4. 运动风衣
+        { id: 13, img: "images/4.jpg", category: "外套", name: "轻薄运动风衣", size: "S", price: 199, shoulder: 41, chest: 98, length: 65, backLength: 67, sleeve: 59, cuff: 10, hem: 100, date: "2024-03-10" },
+        { id: 14, img: "images/4.jpg", category: "外套", name: "轻薄运动风衣", size: "M", price: 199, shoulder: 43, chest: 102, length: 67, backLength: 69, sleeve: 60, cuff: 10.5, hem: 104, date: "2024-03-10" },
+        { id: 15, img: "images/4.jpg", category: "外套", name: "轻薄运动风衣", size: "L", price: 199, shoulder: 45, chest: 106, length: 69, backLength: 71, sleeve: 61, cuff: 11, hem: 108, date: "2024-03-10" },
+        { id: 16, img: "images/4.jpg", category: "外套", name: "轻薄运动风衣", size: "XL", price: 199, shoulder: 47, chest: 110, length: 71, backLength: 73, sleeve: 62, cuff: 11.5, hem: 112, date: "2024-03-10" }
     ];
 
-    // 用于存放被选中的衣服 ID
     let selectedIds = [];
-
     const tableBody = document.getElementById('tableBody');
     const searchInput = document.getElementById('searchInput');
     const sizeFilter = document.getElementById('sizeFilter');
-    const noResult = document.getElementById('noResult');
     const compareSection = document.getElementById('compareSection');
     const compareTable = document.getElementById('compareTable');
 
-    // 2. 渲染主表格
+    // 渲染表格
     function renderTable(data) {
         tableBody.innerHTML = '';
         if (data.length === 0) {
-            noResult.style.display = 'block';
+            tableBody.innerHTML = '<tr><td colspan="14" style="padding: 30px;">没有找到匹配的数据 😢</td></tr>';
             return;
         }
-        noResult.style.display = 'none';
 
         data.forEach(item => {
             const tr = document.createElement('tr');
@@ -129,46 +145,49 @@
             tr.innerHTML = `
                 <td>
                     <button class="btn ${isSelected ? 'btn-selected' : 'btn-select'}" onclick="toggleSelect(${item.id})">
-                        ${isSelected ? '取消对比' : '加入对比'}
+                        ${isSelected ? '取消' : '对比'}
                     </button>
                 </td>
-                <td>${item.brand || '-'}</td>
-                <td>${item.name || '-'}</td>
-                <td><strong>${item.size || '-'}</strong></td>
-                <td>${item.chest || '-'}</td>
-                <td>${item.length || '-'}</td>
-                <td>${item.height || '-'}</td>
-                <td>${item.weight || '-'}</td>
+                <td><img src="${item.img}" class="item-img" onerror="this.src='https://via.placeholder.com/50?text=无图'"></td>
+                <td>${item.category}</td>
+                <td style="text-align: left; font-weight: 500;">${item.name}</td>
+                <td><strong>${item.size}</strong></td>
+                <td class="price">¥${item.price}</td>
+                <td>${item.shoulder}</td>
+                <td>${item.chest}</td>
+                <td>${item.length}</td>
+                <td>${item.backLength}</td>
+                <td>${item.sleeve}</td>
+                <td>${item.cuff}</td>
+                <td>${item.hem}</td>
+                <td style="color: #909399; font-size: 12px;">${item.date}</td>
             `;
             tableBody.appendChild(tr);
         });
     }
 
-    // 3. 切换选中状态
+    // 切换对比状态
     function toggleSelect(id) {
         if (selectedIds.includes(id)) {
             selectedIds = selectedIds.filter(item => item !== id);
         } else {
-            // 限制最多选4件，太多屏幕放不下
             if (selectedIds.length >= 4) {
                 alert("最多只能同时对比 4 件衣服哦！");
                 return;
             }
             selectedIds.push(id);
         }
-        // 重新渲染当前过滤后的表格，并更新对比面板
         filterData();
         renderCompare();
     }
 
-    // 4. 清空对比
     function clearCompare() {
         selectedIds = [];
         filterData();
         renderCompare();
     }
 
-    // 5. 渲染对比面板
+    // 渲染对比面板
     function renderCompare() {
         if (selectedIds.length === 0) {
             compareSection.classList.remove('active');
@@ -178,26 +197,33 @@
         compareSection.classList.add('active');
         const selectedItems = clothesData.filter(item => selectedIds.includes(item.id));
         
-        // 表头：属性名 + 选中的衣服名称
         let theadHtml = '<tr><th>参数项目</th>';
         selectedItems.forEach(item => {
-            theadHtml += `<th>${item.brand}<br>${item.name}<br>(${item.size})</th>`;
+            theadHtml += `
+                <th>
+                    <img src="${item.img}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; margin-bottom: 5px; display:block; margin: 0 auto 5px;"><br>
+                    <span style="font-size: 13px;">${item.name} (${item.size})</span>
+                </th>`;
         });
         theadHtml += '</tr>';
 
-        // 表体：提取各个参数对比
         const fields = [
+            { key: 'price', label: '价格 (¥)', isPrice: true },
+            { key: 'shoulder', label: '肩宽 (cm)' },
             { key: 'chest', label: '胸围 (cm)' },
             { key: 'length', label: '衣长 (cm)' },
-            { key: 'height', label: '建议身高' },
-            { key: 'weight', label: '建议体重' }
+            { key: 'backLength', label: '后衣长 (cm)' },
+            { key: 'sleeve', label: '袖长 (cm)' },
+            { key: 'cuff', label: '袖口宽 (cm)' },
+            { key: 'hem', label: '下摆宽 (cm)' }
         ];
 
         let tbodyHtml = '';
         fields.forEach(field => {
             tbodyHtml += `<tr><th>${field.label}</th>`;
             selectedItems.forEach(item => {
-                tbodyHtml += `<td>${item[field.key] || '-'}</td>`;
+                const val = item[field.key];
+                tbodyHtml += `<td class="${field.isPrice ? 'price' : ''}">${val !== undefined ? val : '-'}</td>`;
             });
             tbodyHtml += '</tr>';
         });
@@ -205,13 +231,13 @@
         compareTable.innerHTML = theadHtml + tbodyHtml;
     }
 
-    // 6. 搜索与筛选逻辑
+    // 搜索与筛选
     function filterData() {
         const keyword = searchInput.value.toLowerCase().trim();
         const selectedSize = sizeFilter.value;
 
         const filtered = clothesData.filter(item => {
-            const matchKeyword = (item.brand && item.brand.toLowerCase().includes(keyword)) || 
+            const matchKeyword = (item.category && item.category.toLowerCase().includes(keyword)) || 
                                  (item.name && item.name.toLowerCase().includes(keyword));
             const matchSize = selectedSize === '' || item.size === selectedSize;
             return matchKeyword && matchSize;
@@ -220,7 +246,6 @@
         renderTable(filtered);
     }
 
-    // 绑定事件
     searchInput.addEventListener('input', filterData);
     sizeFilter.addEventListener('change', filterData);
 
