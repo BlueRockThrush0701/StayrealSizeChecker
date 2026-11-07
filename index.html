@@ -101,7 +101,7 @@
         </select>
     </div>
 
-    <!-- 对比面板已移到最上方 -->
+    <!-- 对比面板 -->
     <div id="compareSection" class="compare-section">
         <div class="compare-header">
             <h2>📊 版型对比面板</h2>
@@ -246,6 +246,7 @@
             const btnText = isSelected ? '取消对比' : '加入对比';
             const vClass = getVersionClass(item.version);
 
+            // 电脑端表格（保留版型）
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><button class="btn ${btnClass}" style="margin:0; padding: 6px 12px;" onclick="toggleSelect(${item.id})">${isSelected ? '取消' : '对比'}</button></td>
@@ -265,6 +266,7 @@
             `;
             tableBody.appendChild(tr);
 
+            // 手机端卡片（删除了版型标签，只保留尺码和类别）
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
@@ -274,7 +276,6 @@
                         <div class="card-price">¥${item.price}</div>
                         <div class="tags-wrap">
                             <span class="tag tag-size">${item.size}</span>
-                            <span class="tag ${vClass}">${item.version}</span>
                             <span class="tag tag-cat">${item.category}</span>
                         </div>
                     </div>
@@ -322,6 +323,7 @@
         compareSection.classList.add('active');
         const selectedItems = clothesData.filter(item => selectedIds.includes(item.id));
         
+        // 对比面板头部（保留版型，便于对比）
         let theadHtml = '<tr><th>参数</th>';
         selectedItems.forEach(item => {
             const vClass = getVersionClass(item.version);
@@ -357,7 +359,7 @@
 
         compareTable.innerHTML = theadHtml + tbodyHtml;
 
-        // 🔥 魔法交互：每次勾选后，自动平滑滚动到页面最顶部的对比面板！
+        // 自动平滑滚动到顶部
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
