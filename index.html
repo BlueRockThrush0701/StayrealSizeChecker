@@ -8,7 +8,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f5f7fa; color: #333; padding: 15px; }
-        .container { max-width: 1300px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         h1 { text-align: center; margin-bottom: 15px; color: #2c3e50; font-size: 22px; }
         
         /* 说明板块 */
@@ -22,35 +22,29 @@
         
         /* 电脑端表格 */
         .table-view { display: block; overflow-x: auto; border: 1px solid #ebeef5; border-radius: 8px; }
-        table { width: 100%; border-collapse: collapse; min-width: 1300px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #ebeef5; font-size: 14px; white-space: nowrap; }
         th { background-color: #fafafa; font-weight: 600; color: #606266; }
         tr:hover { background-color: #f5f7fa; }
         
-        /* 手机端卡片（彻底重构） */
+        /* 手机端卡片 */
         .card-view { display: none; flex-direction: column; gap: 15px; }
         .item-card { border: 1px solid #ebeef5; border-radius: 10px; padding: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .item-card.selected { border-color: #409eff; background-color: #f0f7ff; }
         
-        .card-top { display: flex; gap: 12px; margin-bottom: 10px; }
-        .card-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; background-color: #eee; flex-shrink: 0; }
-        .card-info { flex: 1; overflow: hidden; /* 防止文字撑破 */}
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .card-info { flex: 1; }
         .card-title { font-size: 15px; font-weight: bold; margin-bottom: 6px; color: #2c3e50; line-height: 1.4; }
-        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; margin-bottom: 6px; }
+        .card-price { color: #f56c6c; font-weight: bold; font-size: 15px; }
         
-        /* 标签和链接可以自动换行 */
-        .tags-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
+        /* 标签 */
+        .tags-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
         .tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: normal; white-space: nowrap; }
         .tag-size { background: #e6f7ff; color: #1890ff; }
         .tag-black { background: #333; color: #fff; }
         .tag-red { background: #f56c6c; color: #fff; }
         .tag-other { background: #e6a23c; color: #fff; }
         .tag-cat { background: #f4f4f5; color: #909399; }
-        
-        .links-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-        .link-btn { padding: 3px 8px; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: 500; white-space: nowrap;}
-        .link-tb { background-color: #ff5000; color: white; }
-        .link-xcx { background-color: #07c160; color: white; }
         
         /* 详细参数区 */
         .toggle-details { font-size: 13px; color: #409eff; cursor: pointer; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ebeef5; }
@@ -74,7 +68,6 @@
         .compare-table { width: 100%; border-collapse: collapse; background: #fff; min-width: 600px; }
         .compare-table th, .compare-table td { border: 1px solid #ebeef5; padding: 10px 8px; text-align: center; font-size: 13px; }
         .compare-table th:first-child { background-color: #fafafa; text-align: left; width: 90px; font-weight: bold; color: #606266; white-space: nowrap; }
-        .compare-table img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-bottom: 4px;}
         
         @media (max-width: 768px) {
             .table-view { display: none; }
@@ -92,9 +85,7 @@
         <h3>💡 使用说明</h3>
         1. 本系统数据来源于内部表格，可通过上方搜索框快速查找款式。<br>
         2. 点击“加入对比”，可同时对比最多 4 件衣服的详细尺寸差异。<br>
-        3. 手机版请使用浏览器打开本网页，微信直接打开可能存在比例过窄的问题。 <br>
-        4. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。<br>
-        有任何使用上的问题，请联系小红书：天天蓝蓝蓝矶鸫💙
+        3. 若某项尺寸显示为“-”，代表该款式该尺码暂无此项数据。
     </div>
     
     <div class="controls">
@@ -115,13 +106,11 @@
             <thead>
                 <tr>
                     <th>操作</th>
-                    <th>图片</th>
                     <th>类别</th>
                     <th>商品名</th>
                     <th>版型</th>
                     <th>尺码</th>
                     <th>价格</th>
-                    <th>购买链接</th>
                     <th>肩宽</th>
                     <th>胸围</th>
                     <th>衣长(前)</th>
@@ -167,6 +156,7 @@
         return 'tag-other';
     }
 
+    // 格式化数字，只有纯数字才加 cm
     function formatNum(val) {
         if (val === undefined || val === null || val === "/" || val === "" || val === "-") return "-";
         let strVal = String(val).trim();
@@ -175,6 +165,7 @@
         return strVal + " cm";
     }
 
+    // 智能获取“衣长(前)”的字段
     function getFrontLength(row, size) {
         const possibleKeys = [
             `${size}_衣长(前)`, `${size}_衣长（前）`, 
@@ -195,24 +186,6 @@
         const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 
         rawData.forEach(row => {
-            let rawImgName = row["图片"]; 
-            let finalImgUrl = "https://via.placeholder.com/70?text=无图";
-            if (rawImgName && rawImgName !== "/" && rawImgName !== "-" && rawImgName.trim() !== "") {
-                if (rawImgName.startsWith("http")) {
-                    finalImgUrl = rawImgName;
-                } else {
-                    let suffix = rawImgName.includes('.') ? "" : ".jpg";
-                    finalImgUrl = "image/" + rawImgName + suffix;
-                }
-            }
-
-            let tbLink = row["TB"] && row["TB"] !== "/" ? row["TB"] : "";
-            let xcxLink = row["XCX"] && row["XCX"] !== "/" ? row["XCX"] : "";
-            if(tbLink && !tbLink.startsWith("http")) {
-                let match = tbLink.match(/https?:\/\/[^\s]+/);
-                if(match) tbLink = match[0];
-            }
-
             sizes.forEach(size => {
                 let hasData = false;
                 const keysToCheck = ['肩宽', '胸围', '衣长(前)', '衣长（前）', '衣长', '后衣长', '袖长', '袖口宽', '下摆宽'];
@@ -226,14 +199,11 @@
                 if (hasData) {
                     formatted.push({
                         id: autoId++,
-                        img: finalImgUrl, 
                         category: row["类别"] || "-",
                         name: row["商品名"] || "-",
                         version: row["标准版型"] || "-",
                         price: row["价格"] || "-",
                         date: row["上新日期"] || "-",
-                        tb: tbLink,
-                        xcx: xcxLink,
                         size: size,
                         shoulder: formatNum(row[`${size}_肩宽`]),
                         chest: formatNum(row[`${size}_胸围`]),
@@ -257,7 +227,7 @@
         })
         .catch(error => {
             console.error("数据读取失败", error);
-            tableBody.innerHTML = '<tr><td colspan="16" style="color: red; text-align: center;">请确保 data.json 文件已上传，且列名已按要求修改。</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="14" style="color: red; text-align: center;">请确保 data.json 文件已上传，且列名已按要求修改。</td></tr>';
         });
 
     function renderItems(data) {
@@ -265,7 +235,7 @@
         cardView.innerHTML = '';
 
         if (data.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="16" style="padding: 30px; text-align:center;">没有找到匹配的数据 😢</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="14" style="padding: 30px; text-align:center;">没有找到匹配的数据 😢</td></tr>';
             cardView.innerHTML = '<div style="text-align: center; padding: 30px; color: #999;">没有找到匹配的数据 😢</div>';
             return;
         }
@@ -276,20 +246,15 @@
             const btnText = isSelected ? '取消对比' : '加入对比';
             const vClass = getVersionClass(item.version);
 
-            let linksHtml = '';
-            if (item.tb) linksHtml += `<a href="${item.tb}" target="_blank" class="link-btn link-tb">淘宝</a>`;
-            if (item.xcx) linksHtml += `<a href="${item.xcx}" target="_blank" class="link-btn link-xcx">小程序</a>`;
-
+            // 电脑端表格
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><button class="btn ${btnClass}" style="margin:0; padding: 6px 12px;" onclick="toggleSelect(${item.id})">${isSelected ? '取消' : '对比'}</button></td>
-                <td><img src="${item.img}" class="card-img" style="width:50px; height:50px;" onerror="this.src='https://via.placeholder.com/50?text=无图'"></td>
                 <td>${item.category}</td>
                 <td style="text-align: left; font-weight: bold;">${item.name}</td>
                 <td><span class="tag ${vClass}">${item.version}</span></td>
                 <td><strong>${item.size}</strong></td>
                 <td style="color: #f56c6c; font-weight: bold;">¥${item.price}</td>
-                <td>${linksHtml || '-'}</td>
                 <td>${item.shoulder}</td>
                 <td>${item.chest}</td>
                 <td>${item.length}</td>
@@ -301,11 +266,11 @@
             `;
             tableBody.appendChild(tr);
 
+            // 手机端卡片（纯文字版）
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
                 <div class="card-top">
-                    <img src="${item.img}" class="card-img" onerror="this.src='https://via.placeholder.com/70?text=无图'">
                     <div class="card-info">
                         <div class="card-title">${item.name}</div>
                         <div class="card-price">¥${item.price}</div>
@@ -314,7 +279,6 @@
                             <span class="tag ${vClass}">${item.version}</span>
                             <span class="tag tag-cat">${item.category}</span>
                         </div>
-                        <div class="links-wrap">${linksHtml}</div>
                     </div>
                 </div>
                 <div class="toggle-details" onclick="this.nextElementSibling.classList.toggle('show')">点击查看详细尺寸 👇</div>
@@ -361,8 +325,7 @@
             const vClass = getVersionClass(item.version);
             theadHtml += `
                 <th>
-                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/40?text=无图'"><br>
-                    <span style="font-size: 12px;">${item.name}<br>(${item.size})<br><span class="tag ${vClass}">${item.version}</span></span>
+                    <span style="font-size: 13px;">${item.name}<br>(${item.size})<br><span class="tag ${vClass}">${item.version}</span></span>
                 </th>`;
         });
         theadHtml += '</tr>';
