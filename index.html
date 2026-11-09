@@ -70,12 +70,17 @@
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
         
+        /* 底部统计区域 */
+        .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ebeef5; color: #909399; font-size: 13px; line-height: 1.8; }
+
         @media (max-width: 768px) {
             .table-view { display: none; }
             .card-view { display: flex; }
             .container { padding: 15px; }
         }
     </style>
+    <!-- 引入不蒜子统计脚本 -->
+    <script src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
 </head>
 <body>
 
@@ -141,6 +146,20 @@
     </div>
 
     <div class="card-view" id="cardView"></div>
+
+    <!-- 底部访问量统计区 -->
+    <div class="footer">
+        <div>
+            <span id="busuanzi_container_site_pv" style="display:none;">
+                👀 本站总访问量 <span id="busuanzi_value_site_pv" style="color:#409eff; font-weight:bold;">0</span> 次
+            </span>
+            <span style="margin: 0 10px; color: #dcdfe6;">|</span>
+            <span id="busuanzi_container_site_uv" style="display:none;">
+                🙋‍♂️ 访客数 <span id="busuanzi_value_site_uv" style="color:#409eff; font-weight:bold;">0</span> 人
+            </span>
+        </div>
+        <div style="margin-top: 5px; font-size: 12px; color: #c0c4cc;">STAYREAL Size Finder</div>
+    </div>
 
 </div>
 
@@ -262,7 +281,6 @@
             const btnText = isSelected ? '取消对比' : '加入对比';
             const vClass = getVersionClass(item.version);
 
-            // 电脑端表格（保留版型）
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><button class="btn ${btnClass}" style="margin:0; padding: 6px 12px;" onclick="toggleSelect(${item.id})">${isSelected ? '取消' : '对比'}</button></td>
@@ -282,7 +300,6 @@
             `;
             tableBody.appendChild(tr);
 
-            // 手机端卡片（删除了版型标签，只保留尺码和类别）
             const card = document.createElement('div');
             card.className = `item-card ${isSelected ? 'selected' : ''}`;
             card.innerHTML = `
@@ -339,7 +356,6 @@
         compareSection.classList.add('active');
         const selectedItems = clothesData.filter(item => selectedIds.includes(item.id));
         
-        // 对比面板头部（保留版型，便于对比）
         let theadHtml = '<tr><th>参数</th>';
         selectedItems.forEach(item => {
             const vClass = getVersionClass(item.version);
@@ -375,7 +391,6 @@
 
         compareTable.innerHTML = theadHtml + tbodyHtml;
 
-        // 自动平滑滚动到顶部
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
