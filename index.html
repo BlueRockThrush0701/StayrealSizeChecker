@@ -70,17 +70,15 @@
         .btn-select { background-color: #ecf5ff; color: #409eff; border: 1px solid #b3d8ff; }
         .btn-selected { background-color: #409eff; color: #fff; border: 1px solid #409eff; }
         
-        /* 底部统计区域 */
+        /* 底部版权与访问量 */
         .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ebeef5; color: #909399; font-size: 13px; line-height: 1.8; }
-
+        
         @media (max-width: 768px) {
             .table-view { display: none; }
             .card-view { display: flex; }
             .container { padding: 15px; }
         }
     </style>
-    <!-- 引入不蒜子统计脚本 -->
-    <script src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
 </head>
 <body>
 
@@ -147,15 +145,11 @@
 
     <div class="card-view" id="cardView"></div>
 
-    <!-- 底部访问量统计区 -->
+    <!-- 底部访问量统计区 (Vercount) -->
     <div class="footer">
-        <!-- 不蒜子脚本会自动把父级容器的 display 改成 inline -->
-        <span id="busuanzi_container_site_pv" style="display:none;">
-            👀 本站总访问量 <span id="busuanzi_value_site_pv" style="color:#409eff; font-weight:bold;">0</span> 次
-        </span>
-        <span id="busuanzi_container_site_uv" style="display:none; margin-left: 10px;">
-            🙋‍♂️ 访客数 <span id="busuanzi_value_site_uv" style="color:#409eff; font-weight:bold;">0</span> 人
-        </span>
+        <span id="vercount_value_site_pv" style="font-weight: bold; color: #409eff;">...</span> 次浏览
+        <span style="margin: 0 8px; color: #dcdfe6;">|</span>
+        <span id="vercount_value_site_uv" style="font-weight: bold; color: #409eff;">...</span> 位访客
         <div style="margin-top: 5px; font-size: 12px; color: #c0c4cc;">STAYREAL Size Checker</div>
     </div>
 
@@ -413,6 +407,9 @@
     searchInput.addEventListener('input', filterData);
     sizeFilter.addEventListener('change', filterData);
 </script>
+
+<!-- 引入 Vercount 统计脚本 -->
+<script defer src="https://events.vercount.one/js"></script>
 
 </body>
 </html>
